@@ -2,7 +2,7 @@ version: '3'
 
 services:
   crdb:
-    image: ${DOCKER_REGISTRY}hedwi/cockroach:v23.2.5
+    image: ${DOCKER_REGISTRY}hedwi/cockroach:v23.2
     restart: always
     command: start-single-node --insecure --listen-addr=${CRDB_ADDR} --http-addr=${CRDB_WEB_ADDR}
     volumes:
@@ -10,7 +10,7 @@ services:
     network_mode: "host"
 
   crdb-init:
-    image: ${DOCKER_REGISTRY}hedwi/cockroach:v23.2.5
+    image: ${DOCKER_REGISTRY}hedwi/cockroach:v23.2
     restart: on-failure:5
     volumes:
       - ./crdb/setup_db.sh:/setup_db.sh
