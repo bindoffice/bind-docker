@@ -1,7 +1,7 @@
 all:  compose-up
 
 compose-up:
-	docker-compose up -d
+	docker compose up -d
 
 orb:
 	docker compose up -d
@@ -16,10 +16,10 @@ copy:
 
 stop:
 	#docker stop `docker ps -aq`
-	docker-compose down
+	docker compose down
 
 down:
-	docker-compose down
+	docker compose down
 
 remove-image:
 	sh bin/remove.sh

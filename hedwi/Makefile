@@ -1,7 +1,7 @@
 all:  compose-up
 
 compose-up:
-	docker-compose up -d
+	docker compose up -d
 
 
 orb:
@@ -22,10 +22,10 @@ copy:
 	 \cp -f inbox/certs/cert.key smtp/certs/cert.key && \cp -f inbox/certs/cert.crt smtp/certs/cert.crt
 
 stop: #docker stop `docker ps -aq`
-	docker-compose down
+	docker compose down
 
 down:
-	docker-compose down
+	docker compose down
 
 remove-image:
 	sh bin/remove.sh
