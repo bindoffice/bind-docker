@@ -11,3 +11,4 @@ meetserver/certs/cert.key
 logs/
 certs/
 data/
+.DS_Store
