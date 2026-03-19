@@ -14,12 +14,12 @@ zh-hans: [视频会议文档中文版](https://bindoffice.com/document/meet/zh-h
 
 ```
   #  国外用户
-  git clone https://github.com/bindoffice/bind-docker.git
+  git clone https://github.com/bindoffice/docker.git
 
   #  国内用户
-  git clone https://gitee.com/bindoffice/bind-docker.git
+  git clone https://gitee.com/bindoffice/docker.git
 
-  cd bind-docker/office && make
+  cd docker/office && make
   
 ```
 打开首页 [http://127.0.0.1:40008](http://127.0.0.1:40008)
