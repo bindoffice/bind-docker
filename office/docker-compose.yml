@@ -137,7 +137,7 @@ services:
     network_mode: "host"
     environment:
       BIND_SELF_DOMAIN: "${DOMAIN}"
-      BIND_LICENSE: "${BIND_LICENSE}"
+      BIND_LICENSE: "${LICENSE}"
       BIND_ADMIN_EMAIL: "${ADMIN_EMAIL}"
       BIND_ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
       BIND_OFFICE_SERVER: "http://${OFFICE_API_ADDR}"
