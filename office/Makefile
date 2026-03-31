@@ -14,6 +14,9 @@ renew:
 	sh bin/cert-renew.sh && \cp -f inbox/certs/cert.key nginx/certs/cert.key && \cp -f inbox/certs/cert.crt nginx/certs/cert.crt && \cp -f inbox/certs/cert.key smtp/certs/cert.key && \cp -f inbox/certs/cert.crt smtp/certs/cert.crt
 
 
+openssl:
+       sh bin/openssl.sh
+
 generate:
 	sh bin/cert.sh
 
