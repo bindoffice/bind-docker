@@ -17,6 +17,9 @@ services:
     entrypoint: "/bin/bash"
     command: /setup_db.sh
     network_mode: "host"
+    environment:
+      DB_NAME: "${DB_NAME}"
+      CRDB_ADDR: "${CRDB_ADDR}"
     depends_on:
      - crdb
 
