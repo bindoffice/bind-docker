@@ -1,5 +1,9 @@
 # bind-docker
 
+# About
+
+  Self-hosted office suite, google workspace alternative.
+
 # 文档 Documentation
 
 zh-hans: [办公套件文档 中文版](https://bindoffice.github.io/documentation/office/zh-hans/) en-us: [Work suite documentation](https://bindoffice.github.io/documentation/office/en-us/)
