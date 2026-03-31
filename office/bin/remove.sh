@@ -5,7 +5,7 @@ source ./.env ;
 set +a;
 
 
-List=(hedwi-inbox hedwi-task hedwi-search hedwi-meetserver hedwi-filter hedwi-hub hedwi-smtp hedwi-imap hedwi-office-api hedwi-mqtt hedwi-aiserver)
+List=(bind-inbox bind-task bind-search bind-meetserver bind-filter bind-hub bind-smtp bind-imap bind-office-api bind-mqtt bind-aiserver)
 
 for name in ${List[@]};
 do
