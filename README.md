@@ -21,7 +21,13 @@ zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentatio
   #  国内用户
   git clone https://gitee.com/bindoffice/bind-docker.git
 
-  cd bind-docker/office && make
+  cd bind-docker/office 
+
+  cp env.example .env
+
+  #change variables in .env
+
+  make
   
 ```
 打开首页 [http://127.0.0.1:40008](http://127.0.0.1:40008)
