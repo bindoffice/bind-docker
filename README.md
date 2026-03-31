@@ -31,6 +31,10 @@ zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentatio
 
   #change variables in .env
 
+  # generate self signed ssl certs for nginx, will be replaced by `make cert`
+  make openssl
+
+  # docker-compose up -d 
   make
   
 ```
