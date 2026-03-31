@@ -15,7 +15,7 @@ renew:
 
 
 openssl:
-       sh bin/openssl.sh
+	sh bin/openssl.sh
 
 generate:
 	sh bin/cert.sh
