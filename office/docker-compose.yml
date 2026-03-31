@@ -4,7 +4,7 @@ services:
   crdb:
     image: ${DOCKER_REGISTRY}bindoffice/cockroach:v23.2
     restart: always
-    command: start-single-node --insecure --listen-addr=${CRDB_ADDR} --http-addr=${CRDB_WEB_ADDR}
+    command: start-single-node --accept-sql-without-tls --insecure --listen-addr=${CRDB_ADDR} --http-addr=${CRDB_WEB_ADDR}
     volumes:
      - ./crdb/data:/cockroach/cockroach-data
     network_mode: "host"
