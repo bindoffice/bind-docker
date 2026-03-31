@@ -54,7 +54,7 @@ services:
     container_name: bind_redis
     volumes:
       - ./redis/data:/data/redis
-      - ./redis/logs/redis.log:/data/logs/redis.log
+      - ./redis/logs/:/data/logs/
       - ./redis/redis.conf:/etc/redis/redis.conf
     command:
       redis-server /etc/redis/redis.conf
