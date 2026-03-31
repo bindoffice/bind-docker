@@ -1,4 +1,4 @@
-web_addr: $HEDWI_MEET_ADDR
+web_addr: $BIND_MEET_ADDR
 port: 7880
 log_level: info
 rtc:
@@ -17,7 +17,7 @@ redis:
   username: $REDIS_USER
   password: $REDIS_PASSWORD
 keys:
-  $HEDWI_MEET_KEY: $HEDWI_MEET_SECRET
+  $BIND_MEET_KEY: $BIND_MEET_SECRET
 # when enabled, LiveKit will expose prometheus metrics on :6789/metrics
 #prometheus_port: 6789
 turn:
