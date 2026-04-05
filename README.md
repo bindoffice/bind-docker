@@ -12,7 +12,7 @@ zh-hans: [办公套件文档 中文版](https://bindoffice.github.io/documentati
 zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentation/meet/zh-hans/)   en-us: [Meet documentation](https://bindoffice.github.io/documentation/meet/zh-hans/)
 
 
-- [Discord](https://discord.com/invite/gH38XgvX)
+- [Discord](https://discord.gg/rS6FUqNvG5)
 - [QQ群](https://qm.qq.com/cgi-bin/qm/qr?k=JbieSiHKJBBSrI45cOSP4BG6ll5W9Ct3&jump_from=webapi&authKey=QrQoCwTf3BCPXHbxsYD/nHEcp284BPQQdnrFScq1564ifzNRSfwAKJAOF8Sz5BqX)
 
 # 使用 Usage
