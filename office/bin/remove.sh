@@ -5,7 +5,7 @@ source ./.env ;
 set +a;
 
 
-List=(bind-inbox bind-task bind-search bind-meetserver bind-filter bind-hub bind-smtp bind-imap bind-office-api bind-mqtt bind-aiserver)
+List=(bind-inbox bind-task bind-search bind-meetserver bind-smtp bind-imap bind-office-api bind-mqtt)
 
 for name in ${List[@]};
 do
