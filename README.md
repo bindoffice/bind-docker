@@ -22,8 +22,6 @@ zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentatio
   #  国外用户
   git clone https://github.com/bindoffice/bind-docker.git
 
-  #  国内用户
-  git clone https://gitee.com/bindoffice/bind-docker.git
 
   cd bind-docker/office 
 
