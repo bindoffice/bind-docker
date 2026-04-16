@@ -243,6 +243,8 @@ services:
       BIND_SMTP_KEY: "bind-smtp-bucket"
       BIND_LOCAL_SMTP: "${LOCAL_SMTP_DOMAIN}:40025"
       BIND_SEARCH_SERVER: "http://${SEARCH_ADDR}"
+      BIND_RSPAMD_SERVER: "${RSPAMD_SERVER}"
+      BIND_RSPAMD_PASSWORD: "${RSPAMD_PASSWORD}"
       BIND_SESSION_HEDIS_HOST: "${REDIS_ADDR}"
       BIND_SESSION_HEDIS_PASSWORD: ""
       BIND_SESSION_HEDIS_DB: "1"
@@ -266,6 +268,7 @@ services:
        - nats
        - minio
        - search
+       - rspamd
 
   smtp:
     image: ${DOCKER_REGISTRY}bindoffice/bind-smtp:latest
@@ -355,7 +358,24 @@ services:
       - web
     network_mode: "host"
 
-  
+  rspamd:
+    image: ${DOCKER_REGISTRY}rspamd/rspamd:latest  #nginx镜像，如果镜像容器没有会去自动拉取
+    container_name: bind_rspamd       #容器的名称
+    restart: always             #跟随docker的启动而启动
+    volumes:                    #挂载卷命令
+      - ./config:/etc/rspamd/local.d
+      - ./data:/var/lib/rspamd
+      - ./logs:/var/log/rspamd
+    depends_on:
+      - redis
+      - unbound
+    network_mode: "host"
+
+  unbound:
+    image: mvance/unbound:latest
+    container_name: rspamd-unbound
+    restart: always
+
 volumes:
     crdb:
     redis:
