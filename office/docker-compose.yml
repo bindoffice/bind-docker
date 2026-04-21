@@ -181,6 +181,7 @@ services:
       BIND_NATS_TASK_CLIENT_ID: "bind-service-a"
       BIND_NATS_TASK_MAIL_SEND_SUBJECT: "bind-send"
       BIND_NATS_TASK_MAIL_SAVE_SUBJECT: "bind-save"
+      BIND_MCP_SERVER_URL: "http://${MCP_ADDR}"
     depends_on:
       #- db
        - crdb
@@ -345,7 +346,19 @@ services:
       - crdb
       - crdb-init
 
+  bind-mcp:
+    image: ${DOCKER_REGISTRY}bindoffice/bind-mcp:latest
+    command: ["/data/www/bind-mcp/bind-mcp"]
+    restart: always
+    tty: true
+    volumes:
+      - ./mcp/logs:/data/www/logs
+    network_mode: "host"
+    environment:
+      BIND_MCP_ADDR: "${MCP_ADDR}"
+
   nginx:   #nginx
+
     image: ${DOCKER_REGISTRY}bindoffice/nginx:1.22  #nginx镜像，如果镜像容器没有会去自动拉取
     container_name: bind_nginx       #容器的名称
     restart: always             #跟随docker的启动而启动
