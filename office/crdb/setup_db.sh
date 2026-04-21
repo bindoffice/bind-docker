@@ -5,7 +5,7 @@ echo "Waiting for CockroachDB to be up..."
 
 : "${DB_NAME:?DB_NAME is required (set via docker compose)}"
 
-HOSTPARAMS="--host ${CRDB_ADDR} --insecure --accept-sql-without-tls "
+HOSTPARAMS="--host ${CRDB_ADDR} --insecure "
 SQL="/cockroach/cockroach.sh sql ${HOSTPARAMS}"
 
 for i in $(seq 1 60); do
