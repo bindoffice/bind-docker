@@ -1,8 +1,21 @@
 # bind-docker
 
-# About
+# About 关于
 
   Self-hosted office suite.
+
+- Mail           邮箱
+- Contacts       通讯录
+- Calendar       日历
+- AI             AI
+- Meet           会议
+- Chat           聊天
+- Kanban         看板
+- Drive          云盘
+- Docs           文档
+- Sheets         表格
+- Slides         演示
+- Note           笔记
 
 # 文档 Documentation
 
