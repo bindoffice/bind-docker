@@ -13,3 +13,4 @@ docker pull "$DOCKER_REGISTRY"bindoffice/bind-task:latest
 docker pull "$DOCKER_REGISTRY"bindoffice/bind-search:latest
 docker pull "$DOCKER_REGISTRY"bindoffice/bind-mqtt:latest
 docker pull "$DOCKER_REGISTRY"bindoffice/bind-mcp:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bind-static:latest
