@@ -384,7 +384,7 @@ services:
     network_mode: "host"
 
   rspamd:
-    image: ${DOCKER_REGISTRY}rspamd/rspamd:latest  #nginx镜像，如果镜像容器没有会去自动拉取
+    image: ${DOCKER_REGISTRY}bindoffice/rspamd:latest  #nginx镜像，如果镜像容器没有会去自动拉取
     container_name: bind_rspamd       #容器的名称
     restart: always             #跟随docker的启动而启动
     volumes:                    #挂载卷命令
@@ -397,7 +397,7 @@ services:
     network_mode: "host"
 
   unbound:
-    image: mvance/unbound:latest
+    image: ${DOCKER_REGISTRY}bindoffice/unbound:latest
     container_name: rspamd-unbound
     restart: always
 
