@@ -3,9 +3,12 @@
 # 使用
 
 ```
-  git clone https://github.com/Hedwi/hedwi-docker.git
-  cd hedwi-docker/meet
+  git clone https://github.com/bindoffice/bind-docker.git
+  cd bind-docker/meet
   cp env.example .env
+
+  #change variables in .env
+
   make
   
 ```
