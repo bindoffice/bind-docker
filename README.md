@@ -2,7 +2,7 @@
 
 # About
 
-  Self-hosted office suite, google workspace alternative.
+  Self-hosted office suite.
 
 # 文档 Documentation
 
