@@ -193,6 +193,18 @@ services:
        - meet-server
        - mqtt
 
+  bind-static:
+    image: ${DOCKER_REGISTRY}bindoffice/bind-static:latest
+    command: ["/data/www/bind-static/bind-static"]
+    container_name: staticserver
+    restart: always
+    tty: true
+    volumes:
+      - ./static/logs:/data/www/logs
+    network_mode: "host"
+    environment:
+      BIND_STATIC_ADDR: "${STATIC_ADDR}"
+
   typesense:
     image: ${DOCKER_REGISTRY}bindoffice/typesense:28.0
     container_name: typesense
