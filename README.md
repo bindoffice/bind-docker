@@ -2,7 +2,7 @@
 
 # About 关于
 
-  Self-hosted office suite.
+  Self-hosted office suite. Website: https://bindoffice.com
 
 - Mail           邮箱
 - Contacts       通讯录
