@@ -41,6 +41,17 @@ services:
     depends_on:
       - redis
 
+  bind-static:
+    image: ${DOCKER_REGISTRY}bindoffice/bind-static:latest
+    command: ["/data/www/bind-static/bind-static"]
+    container_name: staticserver
+    restart: always
+    tty: true
+    volumes:
+      - ./static/logs:/data/www/logs
+    network_mode: "host"
+    environment:
+      BIND_STATIC_ADDR: "${STATIC_ADDR}"
 
   nginx:   #
     image: ${DOCKER_REGISTRY}bindoffice/nginx:1.22  #nginx镜像，如果镜像容器没有会去自动拉取
