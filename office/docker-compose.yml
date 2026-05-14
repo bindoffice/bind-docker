@@ -371,7 +371,7 @@ services:
 
   nginx:   #nginx
 
-    image: ${DOCKER_REGISTRY}bindoffice/nginx:1.22  #nginx镜像，如果镜像容器没有会去自动拉取
+    image: ${DOCKER_REGISTRY}bindoffice/nginx:1.31.0  #nginx镜像，如果镜像容器没有会去自动拉取
     container_name: bind_nginx       #容器的名称
     restart: always             #跟随docker的启动而启动
     volumes:                    #挂载卷命令
