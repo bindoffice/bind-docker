@@ -274,6 +274,9 @@ services:
       BIND_NATS_TASK_CLIENT_ID: "bind-service-a"
       BIND_NATS_TASK_MAIL_SEND_SUBJECT: "bind-send"
       BIND_NATS_TASK_MAIL_SAVE_SUBJECT: "bind-save"
+      BIND_MQTT_PUBLIC_ADDR: "${MQTT_PROTOCOL}://${DOMAIN}:${MQTT_PUBLIC_PORT}"
+      BIND_MQTT_CLIENT_ID: "${TASK_MQTT_ID}"
+      BIND_MQTT_ADDR: "${MQTT_IP}:${MQTT_PORT}"
     depends_on:
        - crdb
        - crdb-init
