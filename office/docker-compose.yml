@@ -236,6 +236,7 @@ services:
       BIND_SESSION_HEDIS_PASSWORD: ""
       BIND_SESSION_HEDIS_DB: "1"
       BIND_SESSION_HEDIS_POOLSIZE: "10"
+      BIND_MQTT_TASK_SECRET: "${TASK_SECRET}"
     depends_on:
        - redis
 
@@ -277,6 +278,7 @@ services:
       BIND_MQTT_PUBLIC_ADDR: "${MQTT_PROTOCOL}://${DOMAIN}:${MQTT_PUBLIC_PORT}"
       BIND_MQTT_CLIENT_ID: "${TASK_MQTT_ID}"
       BIND_MQTT_ADDR: "${MQTT_IP}:${MQTT_PORT}"
+      BIND_MQTT_TASK_SECRET: "${TASK_SECRET}"
     depends_on:
        - crdb
        - crdb-init
