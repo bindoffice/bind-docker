@@ -1,14 +1,27 @@
-bind/redis/data/dump.rdb
-bind/minio/data/
-bind/mydb/data/
-bind/crdb/data/
 *.rdb
 .env
-inbox/certs/cert.crt
-inbox/certs/cert.key
-meetserver/certs/cert.crt
-meetserver/certs/cert.key
-logs/
-certs/
-data/
 .DS_Store
+
+# Office runtime data
+office/redis/data/
+office/minio/data/
+office/crdb/data/
+office/typesense/data/
+office/nats/data/
+office/data/
+office/logs/
+office/config/
+
+# Meet runtime data
+meet/redis/data/
+
+# Generated certificates
+office/inbox/certs/cert.crt
+office/inbox/certs/cert.key
+office/nginx/certs/
+office/smtp/certs/
+office/meetserver/certs/
+meet/meetserver/certs/
+meet/nginx/certs/
+
+# Service logs (generated at runtime)

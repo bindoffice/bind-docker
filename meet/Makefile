@@ -8,6 +8,9 @@ orb:
 
 cert:generate copy
 
+openssl:
+	sh bin/openssl.sh
+
 generate:
 	sh bin/cert.sh
 

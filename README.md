@@ -21,33 +21,47 @@
 
 zh-hans: [办公套件文档 中文版](https://bindoffice.github.io/documentation/office/zh-hans/) en-us: [Work suite documentation](https://bindoffice.github.io/documentation/office/en-us/)
 
-
-zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentation/meet/zh-hans/)   en-us: [Meet documentation](https://bindoffice.github.io/documentation/meet/zh-hans/)
-
+zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentation/meet/zh-hans/)   en-us: [Meet documentation](https://bindoffice.github.io/documentation/meet/en-us/)
 
 - [Discord](https://discord.gg/rS6FUqNvG5)
 - [QQ群](https://qm.qq.com/cgi-bin/qm/qr?k=JbieSiHKJBBSrI45cOSP4BG6ll5W9Ct3&jump_from=webapi&authKey=QrQoCwTf3BCPXHbxsYD/nHEcp284BPQQdnrFScq1564ifzNRSfwAKJAOF8Sz5BqX)
 
 # 使用 Usage
 
+## Office 办公套件
 
 ```
-
   git clone https://github.com/bindoffice/bind-docker.git
 
-
-  cd bind-docker/office 
+  cd bind-docker/office
 
   cp env.example .env
 
-  #change variables in .env
+  # change variables in .env
 
   # generate self signed ssl certs for nginx, will be replaced by `make cert`
   make openssl
 
-  # docker-compose up -d 
+  # docker-compose up -d
   make
-  
 ```
+
 打开首页 [http://127.0.0.1:40008](http://127.0.0.1:40008)
 
+## Meet 视频会议（独立部署）
+
+详见 [meet/README.md](meet/README.md)。
+
+```
+  cd bind-docker/meet
+
+  cp env.example .env
+
+  # change variables in .env
+
+  make openssl
+
+  make
+```
+
+打开首页 [http://127.0.0.1:8888](http://127.0.0.1:8888)

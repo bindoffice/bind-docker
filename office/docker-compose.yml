@@ -100,7 +100,7 @@ services:
       BIND_OSS_ACCESS_KEY: "${MINIO_USER}"
       BIND_OSS_ACCESS_SECRET: "${MINIO_PASSWORD}"
       BIND_OSS_USE_SSL: "${MINIO_USESSL}"
-      BIND_OSS_DRIVE_BUCKET_NAME: "drive"
+      BIND_OSS_DRIVE_BUCKET_NAME: "${DRIVE_BUCKET}"
     depends_on:
        - crdb
        - crdb-init

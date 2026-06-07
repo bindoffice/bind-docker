@@ -10,7 +10,7 @@ List=(bind-inbox bind-task bind-search bind-meetserver bind-smtp bind-imap bind-
 for name in ${List[@]};
 do
     echo $name;
-    REF="$DOCKER_REGISTRY"hedwi/"$name"
+    REF="$DOCKER_REGISTRY"bindoffice/"$name"
     ID=$(docker images --filter=reference="$REF" --format "{{.ID}}");
     docker image rm -f $ID; 
 done
