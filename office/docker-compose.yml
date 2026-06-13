@@ -2,7 +2,7 @@ version: '3'
 
 services:
   crdb:
-    image: ${DOCKER_REGISTRY}bindoffice/cockroach:v23.2
+    image: ${DOCKER_REGISTRY}bindoffice/cockroach:v23.2.15
     restart: always
     command: start-single-node --accept-sql-without-tls --insecure --listen-addr=${CRDB_ADDR} --http-addr=${CRDB_WEB_ADDR}
     volumes:
