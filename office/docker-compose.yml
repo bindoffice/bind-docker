@@ -2,7 +2,7 @@ version: '3'
 
 services:
   crdb:
-    image: ${DOCKER_REGISTRY}bindoffice/cockroach:v23.2.15
+    image: ${DOCKER_REGISTRY}bindoffice/bindsql:latest
     restart: always
     command: start-single-node --accept-sql-without-tls --insecure --listen-addr=${CRDB_ADDR} --http-addr=${CRDB_WEB_ADDR}
     volumes:
@@ -10,7 +10,7 @@ services:
     network_mode: "host"
 
   crdb-init:
-    image: ${DOCKER_REGISTRY}bindoffice/cockroach:v23.2
+    image: ${DOCKER_REGISTRY}bindoffice/bindsql:latest
     restart: on-failure:5
     volumes:
       - ./crdb/setup_db.sh:/setup_db.sh
@@ -23,11 +23,11 @@ services:
     depends_on:
      - crdb
 
-  minio:
-    image: ${DOCKER_REGISTRY}bindoffice/minio:RELEASE.2021-04-22T15-44-28Z
+  bindstore:
+    image: ${DOCKER_REGISTRY}bindoffice/bindstore:latest
     restart: always
-    container_name: bind_minio
-    command: server /data/www/minio --address ${MINIO_ADDR} --console-address ${MINIO_WEB_ADDR}
+    container_name: bind_store
+    command: server /data/www/bindstore --address ${MINIO_ADDR} --console-address ${MINIO_WEB_ADDR}
     network_mode: "host"
     environment:
       MINIO_ACCESS_KEY: "${MINIO_USER}"
@@ -65,12 +65,12 @@ services:
 
   
   meet-server:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-meetserver:latest
+    image: ${DOCKER_REGISTRY}bindoffice/bindmeet:latest
     restart: always
     volumes:
-      - ./meetserver/config.yaml:/data/www/bind-meetserver/config.yaml
-    working_dir: /data/www/bind-meetserver
-    command: ["/data/www/bind-meetserver/bind-meetserver"]
+      - ./meetserver/config.yaml:/data/www/bindmeet/config.yaml
+    working_dir: /data/www/bindmeet
+    command: ["/data/www/bindmeet/bindmeet"]
     network_mode: "host"
     environment:
       BIND_SELF_DOMAIN: "${DOMAIN}"
@@ -84,9 +84,9 @@ services:
       - redis
 
   office-api:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-office-api:latest
+    image: ${DOCKER_REGISTRY}bindoffice/bindoffice:latest
     container_name: bind_office_api       #容器的名称
-    command: ["/data/www/bind-office-api/bind-office-api"]
+    command: ["/data/www/bindoffice/bindoffice"]
     restart: always
     tty: true
     volumes:
@@ -104,18 +104,18 @@ services:
     depends_on:
        - crdb
        - crdb-init
-       - minio
+       - bindstore
 
   
   search:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-search:latest
+    image: ${DOCKER_REGISTRY}bindoffice/bindsearch:latest
     container_name: bind_search       #容器的名称
-    command: ["/data/www/bind-search/bind-search"]
+    command: ["/data/www/bindsearch/bindsearch"]
     restart: always
     tty: true
     volumes:
       - ./search/logs:/data/www/logs
-      - ./search/data:/data/www/bind-search/data
+      - ./search/data:/data/www/bindsearch/data
     network_mode: "host"
     environment:
       BIND_SEARCH_ADDR: "${SEARCH_ADDR}"
@@ -125,8 +125,8 @@ services:
        - typesense
 
   web:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-inbox:latest
-    command: ["/data/www/bind-inbox/bind-inbox"]
+    image: ${DOCKER_REGISTRY}bindoffice/bindinbox:latest
+    command: ["/data/www/bindinbox/bindinbox"]
     container_name: inboxserver
     restart: always
     tty: true
@@ -188,7 +188,7 @@ services:
        - crdb
        - crdb-init
        - redis
-       - minio
+       - bindstore
        - office-api
        - search
        - meet-server
@@ -210,9 +210,9 @@ services:
       TYPESENSE_PORT: "${TYPESENSE_PORT}"
 
   mqtt:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-mqtt:latest
+    image: ${DOCKER_REGISTRY}bindoffice/bindmqtt:latest
     container_name: bind_mqtt
-    command: ["/data/www/bind-mqtt/bind-mqtt"]
+    command: ["/data/www/bindmqtt/bindmqtt"]
     restart: always
     tty: true
     volumes:
@@ -230,9 +230,9 @@ services:
        - redis
 
   task:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-task:latest
+    image: ${DOCKER_REGISTRY}bindoffice/bindtask:latest
     container_name: bind_task
-    command: ["/data/www/bind-task/bind-task"]
+    command: ["/data/www/bindtask/bindtask"]
     restart: always
     tty: true
     volumes:
@@ -273,18 +273,18 @@ services:
        - crdb-init
        - redis
        - nats
-       - minio
+       - bindstore
        - search
        - rspamd
 
   smtp:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-smtp:latest
-    command: ["/data/www/bind-smtp/bind-smtp"]
+    image: ${DOCKER_REGISTRY}bindoffice/bindsmtp:latest
+    command: ["/data/www/bindsmtp/bindsmtp"]
     restart: always
     tty: true
     volumes:
       - ./smtp/logs:/data/www/logs
-      - ./smtp/data:/data/www/bind-smtp/data
+      - ./smtp/data:/data/www/bindsmtp/data
       - ./smtp/certs:/tmp/bind_certs
       - ./1:/etc/ssl/certs/ca-bundle.crt
       - ./2:/etc/ssl/certs/ca-bundle.trust.crt
@@ -294,7 +294,7 @@ services:
       BIND_SMTP_KEY: "bind-smtp-bucket"
       BIND_SMTP_HOSTNAME: ""
       BIND_SMTP_MAX_DATASIZE: "50"
-      BIND_SMTP_DATA_DIR: "/data/www/bind-smtp/data"
+      BIND_SMTP_DATA_DIR: "/data/www/bindsmtp/data"
       BIND_CERT_DIR: "${CERT_DIR}"
       BIND_SMTP_ADDRESSES: "${SMTP_ADDR}"
       BIND_SMTP_SUBMISSION_ADDRESSES: "systemd"
@@ -325,13 +325,13 @@ services:
 
     depends_on:
       - search
-      - minio
+      - bindstore
       - redis
       - nats
 
   imap:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-imap:latest
-    command: ["/data/www/bind-imap/bind-imap"]
+    image: ${DOCKER_REGISTRY}bindoffice/bindimap:latest
+    command: ["/data/www/bindimap/bindimap"]
     restart: always
     tty: true
     volumes:
@@ -352,9 +352,9 @@ services:
       - crdb
       - crdb-init
 
-  bind-mcp:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-mcp:latest
-    command: ["/data/www/bind-mcp/bind-mcp"]
+  bindmcp:
+    image: ${DOCKER_REGISTRY}bindoffice/bindmcp:latest
+    command: ["/data/www/bindmcp/bindmcp"]
     restart: always
     tty: true
     volumes:
@@ -400,7 +400,7 @@ volumes:
     redis:
     conf:
     nginx:
-    minio:
+    bindstore:
     office-api:
     meet-server:
     smtp:
