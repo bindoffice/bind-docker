@@ -4,13 +4,12 @@ set -a # 将所有变量自动导出
 source ./.env
 set +a
 
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-inbox:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-meetserver:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-office-api:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-smtp:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-imap:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-task:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-search:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-mqtt:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-mcp:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bind-static:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindinbox:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindmeet:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindoffice:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindsmtp:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindimap:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindtask:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindsearch:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindmqtt:latest
+docker pull "$DOCKER_REGISTRY"bindoffice/bindmcp:latest

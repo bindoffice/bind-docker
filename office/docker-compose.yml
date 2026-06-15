@@ -1,19 +1,19 @@
 version: '3'
 
 services:
-  crdb:
+  binddb:
     image: ${DOCKER_REGISTRY}bindoffice/bindsql:latest
     restart: always
     command: start-single-node --accept-sql-without-tls --insecure --listen-addr=${CRDB_ADDR} --http-addr=${CRDB_WEB_ADDR}
     volumes:
-     - ./crdb/data:/cockroach/cockroach-data
+     - ./binddb/data:/cockroach/cockroach-data
     network_mode: "host"
 
-  crdb-init:
+  binddb-init:
     image: ${DOCKER_REGISTRY}bindoffice/bindsql:latest
     restart: on-failure:5
     volumes:
-      - ./crdb/setup_db.sh:/setup_db.sh
+      - ./binddb/setup_db.sh:/setup_db.sh
     entrypoint: "/bin/bash"
     command: /setup_db.sh
     network_mode: "host"
@@ -21,13 +21,13 @@ services:
       DB_NAME: "${DB_NAME}"
       CRDB_ADDR: "${CRDB_ADDR}"
     depends_on:
-     - crdb
+     - binddb 
 
   bindstore:
     image: ${DOCKER_REGISTRY}bindoffice/bindstore:latest
     restart: always
     container_name: bind_store
-    command: server /data/www/bindstore --address ${MINIO_ADDR} --console-address ${MINIO_WEB_ADDR}
+    command: /data/www/bindstore/bindstore server /data/www/store --address ${MINIO_ADDR}
     network_mode: "host"
     environment:
       MINIO_ACCESS_KEY: "${MINIO_USER}"
@@ -38,8 +38,8 @@ services:
         max-file: "10"
       driver: json-file
     volumes:
-      - ./minio/data:/data/www/minio
-      - ./minio/config:/root/.minio
+      - ./store/data:/data/www/store
+      - ./store/config:/root/.bindstore
 
   nats:
     image: ${DOCKER_REGISTRY}bindoffice/nats:2.9.25
@@ -102,8 +102,8 @@ services:
       BIND_OSS_USE_SSL: "${MINIO_USESSL}"
       BIND_OSS_DRIVE_BUCKET_NAME: "${DRIVE_BUCKET}"
     depends_on:
-       - crdb
-       - crdb-init
+       - binddb
+       - binddb-init
        - bindstore
 
   
@@ -185,8 +185,8 @@ services:
       BIND_MCP_SERVER_URL: "http://${MCP_ADDR}"
     depends_on:
       #- db
-       - crdb
-       - crdb-init
+       - binddb
+       - binddb-init
        - redis
        - bindstore
        - office-api
@@ -269,8 +269,8 @@ services:
       BIND_MQTT_ADDR: "${MQTT_IP}:${MQTT_PORT}"
       BIND_MQTT_TASK_SECRET: "${TASK_SECRET}"
     depends_on:
-       - crdb
-       - crdb-init
+       - binddb
+       - binddb-init
        - redis
        - nats
        - bindstore
@@ -340,6 +340,7 @@ services:
     network_mode: "host"
     environment:
       BIND_IMAP_ADDR: "${IMAP_ADDR}"
+      BIND_CERT_DIR: "${CERT_DIR}"
       BIND_IMAP_TLS_ADDR: "${IMAP_TLS_ADDR}"
       BIND_SQLDB: "postgresql://root@${CRDB_ADDR}/${DB_NAME}"
       BIND_SESSION_HEDIS_HOST: "${REDIS_ADDR}"
@@ -349,8 +350,8 @@ services:
       BIND_SEARCH_SERVER: "http://${SEARCH_ADDR}"
     depends_on:
       - search
-      - crdb
-      - crdb-init
+      - binddb
+      - binddb-init
 
   bindmcp:
     image: ${DOCKER_REGISTRY}bindoffice/bindmcp:latest
@@ -396,7 +397,7 @@ services:
     restart: always
 
 volumes:
-    crdb:
+    binddb:
     redis:
     conf:
     nginx:
