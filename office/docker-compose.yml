@@ -26,7 +26,7 @@ services:
   bindstore:
     image: ${DOCKER_REGISTRY}bindoffice/bindstore:latest
     restart: always
-    container_name: bind_store
+    container_name: bindstore
     command: /data/www/bindstore/bindstore server /data/www/store --address ${MINIO_ADDR}
     network_mode: "host"
     environment:
@@ -279,6 +279,7 @@ services:
 
   bindsmtp:
     image: ${DOCKER_REGISTRY}bindoffice/bindsmtp:latest
+    container_name: bindsmtp
     command: ["/data/www/bindsmtp/bindsmtp"]
     restart: always
     tty: true
@@ -331,6 +332,7 @@ services:
 
   bindimap:
     image: ${DOCKER_REGISTRY}bindoffice/bindimap:latest
+    container_name: bindimap
     command: ["/data/www/bindimap/bindimap"]
     restart: always
     tty: true
