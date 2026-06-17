@@ -14,16 +14,16 @@ services:
     network_mode: "host"
 
   
-  meet-server:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-meetserver:latest
+  bindmeet:
+    image: ${DOCKER_REGISTRY}bindoffice/bindmeet:latest
     restart: always
     volumes:
-      - ./meetserver/config.yaml:/data/www/bind-meetserver/config.yaml
-      - ./meetserver/certs:/tmp/bind_certs
+      - ./bindmeet/config.yaml:/data/www/bindmeet/config.yaml
+      - ./bindmeet/certs:/tmp/bind_certs
       - /etc/ssl/certs/ca-bundle.crt:/etc/ssl/certs/ca-bundle.crt
       - /etc/ssl/certs/ca-bundle.trust.crt:/etc/ssl/certs/ca-bundle.trust.crt
-    working_dir: /data/www/bind-meetserver
-    command: ["/data/www/bind-meetserver/bind-meetserver"]
+    working_dir: /data/www/bindmeet
+    command: ["/data/www/bindmeet/bindmeet"]
     network_mode: "host"
     environment:
       BIND_SELF_DOMAIN: "${DOMAIN}"
@@ -41,18 +41,6 @@ services:
     depends_on:
       - redis
 
-  bind-static:
-    image: ${DOCKER_REGISTRY}bindoffice/bind-static:latest
-    command: ["/data/www/bind-static/bind-static"]
-    container_name: staticserver
-    restart: always
-    tty: true
-    volumes:
-      - ./static/logs:/data/www/logs
-    network_mode: "host"
-    environment:
-      BIND_STATIC_ADDR: "${STATIC_ADDR}"
-
   nginx:   #
     image: ${DOCKER_REGISTRY}bindoffice/nginx:1.31.0  #nginx镜像，如果镜像容器没有会去自动拉取
     container_name: meet_nginx       #容器的名称
@@ -65,10 +53,10 @@ services:
 
     depends_on:
       - redis
-      - meet-server
+      - bindmeet
     network_mode: "host"
 
 volumes:
     redis:
-    meet-server:
+    bindmeet:
     nginx:
