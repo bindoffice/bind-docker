@@ -64,11 +64,11 @@ services:
     network_mode: "host"
 
   
-  meet-server:
+  bindmeet:
     image: ${DOCKER_REGISTRY}bindoffice/bindmeet:latest
     restart: always
     volumes:
-      - ./meetserver/config.yaml:/data/www/bindmeet/config.yaml
+      - ./bindmeet/config.yaml:/data/www/bindmeet/config.yaml
     working_dir: /data/www/bindmeet
     command: ["/data/www/bindmeet/bindmeet"]
     network_mode: "host"
@@ -83,14 +83,14 @@ services:
     depends_on:
       - redis
 
-  office-api:
+  bindoffice:
     image: ${DOCKER_REGISTRY}bindoffice/bindoffice:latest
-    container_name: bind_office_api       #容器的名称
+    container_name: bindoffice       #容器的名称
     command: ["/data/www/bindoffice/bindoffice"]
     restart: always
     tty: true
     volumes:
-      - ./office-api/logs:/data/www/logs
+      - ./bindoffice/logs:/data/www/logs
     network_mode: "host"
     environment:
       BIND_OFFICE_API_ADDR: "${OFFICE_API_ADDR}"
@@ -107,15 +107,15 @@ services:
        - bindstore
 
   
-  search:
+  bindsearch:
     image: ${DOCKER_REGISTRY}bindoffice/bindsearch:latest
-    container_name: bind_search       #容器的名称
+    container_name: bindsearch       #容器的名称
     command: ["/data/www/bindsearch/bindsearch"]
     restart: always
     tty: true
     volumes:
-      - ./search/logs:/data/www/logs
-      - ./search/data:/data/www/bindsearch/data
+      - ./bindsearch/logs:/data/www/logs
+      - ./bindsearch/data:/data/www/bindsearch/data
     network_mode: "host"
     environment:
       BIND_SEARCH_ADDR: "${SEARCH_ADDR}"
@@ -124,15 +124,15 @@ services:
     depends_on:
        - typesense
 
-  web:
+  bindinbox:
     image: ${DOCKER_REGISTRY}bindoffice/bindinbox:latest
     command: ["/data/www/bindinbox/bindinbox"]
     container_name: inboxserver
     restart: always
     tty: true
     volumes:
-      - ./inbox/logs:/data/www/logs
-      - ./inbox/certs:/tmp/bind_certs
+      - ./bindinbox/logs:/data/www/logs
+      - ./bindinbox/certs:/tmp/bind_certs
       #- /etc/ssl/certs/ca-bundle.crt:/etc/ssl/certs/ca-bundle.crt":
       #- /etc/ssl/certs/ca-bundle.trust.crt:/etc/ssl/certs/ca-bundle.trust.crt
       - ./1:/etc/ssl/certs/ca-bundle.crt
@@ -189,10 +189,10 @@ services:
        - bindsql-init
        - redis
        - bindstore
-       - office-api
-       - search
-       - meet-server
-       - mqtt
+       - bindoffice
+       - bindsearch
+       - bindmeet
+       - bindmqtt
 
   typesense:
     image: ${DOCKER_REGISTRY}bindoffice/typesense:28.0
@@ -209,14 +209,14 @@ services:
       TYPESENSE_ADDR: "${TYPESENSE_ADDR}"
       TYPESENSE_PORT: "${TYPESENSE_PORT}"
 
-  mqtt:
+  bindmqtt:
     image: ${DOCKER_REGISTRY}bindoffice/bindmqtt:latest
-    container_name: bind_mqtt
+    container_name: bindmqtt
     command: ["/data/www/bindmqtt/bindmqtt"]
     restart: always
     tty: true
     volumes:
-      - ./mqtt/logs:/data/www/logs
+      - ./bindmqtt/logs:/data/www/logs
     network_mode: "host"
     environment:
       BIND_MQTT_CLIENT_ID: "${MQTT_ID}"
@@ -229,16 +229,16 @@ services:
     depends_on:
        - redis
 
-  task:
+  bindtask:
     image: ${DOCKER_REGISTRY}bindoffice/bindtask:latest
-    container_name: bind_task
+    container_name: bindtask
     command: ["/data/www/bindtask/bindtask"]
     restart: always
     tty: true
     volumes:
       - /etc/ssl/certs/ca-bundle.crt:/etc/ssl/certs/ca-bundle.crt
       - /etc/ssl/certs/ca-bundle.trust.crt:/etc/ssl/certs/ca-bundle.trust.crt
-      - ./task/logs:/data/www/logs
+      - ./bindtask/logs:/data/www/logs
     network_mode: "host"
     environment:
       BIND_SQLDB: "postgresql://root@${BINDSQL_ADDR}/${DB_NAME}"
@@ -274,7 +274,7 @@ services:
        - redis
        - nats
        - bindstore
-       - search
+       - bindsearch
        - rspamd
 
   smtp:
@@ -324,7 +324,7 @@ services:
       BIND_OSS_DRIVE_BUCKET_NAME: "${DRIVE_BUCKET}"
 
     depends_on:
-      - search
+      - bindsearch
       - bindstore
       - redis
       - nats
@@ -349,7 +349,7 @@ services:
       BIND_SESSION_HEDIS_POOLSIZE: "10"
       BIND_SEARCH_SERVER: "http://${SEARCH_ADDR}"
     depends_on:
-      - search
+      - bindsearch
       - bindsql
       - bindsql-init
 
@@ -359,7 +359,7 @@ services:
     restart: always
     tty: true
     volumes:
-      - ./mcp/logs:/data/www/logs
+      - ./bindmcp/logs:/data/www/logs
     network_mode: "host"
     environment:
       BIND_MCP_ADDR: "${MCP_ADDR}"
@@ -375,7 +375,7 @@ services:
       - ./nginx/conf.d/inbox.conf:/etc/nginx/conf.d/default.conf #映射配置文件
       - ./nginx/certs:/etc/nginx/certs
     depends_on:
-      - web
+      - bindinbox
     network_mode: "host"
 
   rspamd:
@@ -402,8 +402,13 @@ volumes:
     conf:
     nginx:
     bindstore:
-    office-api:
-    meet-server:
-    smtp:
-    imap:
+    bindoffice:
+    bindmeet:
+    bindsmtp:
+    bindimap:
+    bindmcp:
+    bindmqtt:
+    bindtask:
+    bindsearch:
+    typesense:
 
