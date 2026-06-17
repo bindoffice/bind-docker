@@ -6,7 +6,7 @@ services:
     restart: always
     command: start-single-node --accept-sql-without-tls --insecure --listen-addr=${BINDSQL_ADDR} --http-addr=${BINDSQL_WEB_ADDR}
     volumes:
-     - ./bindsql/data:/bindsql/bindsqldata
+     - ./bindsql/data:/bindsql/bindsql-data
     network_mode: "host"
 
   bindsql-init:
@@ -19,7 +19,7 @@ services:
     network_mode: "host"
     environment:
       DB_NAME: "${DB_NAME}"
-      BINDDB_ADDR: "${BINDDB_ADDR}"
+      BINDSQL_ADDR: "${BINDSQL_ADDR}"
     depends_on:
      - bindsql
 
@@ -103,6 +103,7 @@ services:
       BIND_OSS_DRIVE_BUCKET_NAME: "${DRIVE_BUCKET}"
     depends_on:
        - bindsql
+       - bindsql-init
        - bindstore
 
   
@@ -185,6 +186,7 @@ services:
     depends_on:
       #- db
        - bindsql
+       - bindsql-init
        - redis
        - bindstore
        - office-api
@@ -268,6 +270,7 @@ services:
       BIND_MQTT_TASK_SECRET: "${TASK_SECRET}"
     depends_on:
        - bindsql
+       - bindsql-init
        - redis
        - nats
        - bindstore
@@ -348,6 +351,7 @@ services:
     depends_on:
       - search
       - bindsql
+      - bindsql-init
 
   bindmcp:
     image: ${DOCKER_REGISTRY}bindoffice/bindmcp:latest
