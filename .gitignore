@@ -23,5 +23,6 @@ office/smtp/certs/
 office/meetserver/certs/
 meet/meetserver/certs/
 meet/nginx/certs/
+office/bindsql/data/*
 
 # Service logs (generated at runtime)

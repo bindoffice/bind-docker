@@ -1,19 +1,19 @@
 version: '3'
 
 services:
-  binddb:
+  bindsql:
     image: ${DOCKER_REGISTRY}bindoffice/bindsql:latest
     restart: always
-    command: start-single-node --accept-sql-without-tls --insecure --listen-addr=${BINDDB_ADDR} --http-addr=${BINDDB_WEB_ADDR}
+    command: start-single-node --accept-sql-without-tls --insecure --listen-addr=${BINDSQL_ADDR} --http-addr=${BINDSQL_WEB_ADDR}
     volumes:
-     - ./binddb/data:/cockroach/cockroach-data
+     - ./bindsql/data:/bindsql/bindsqldata
     network_mode: "host"
 
-  binddb-init:
+  bindsql-init:
     image: ${DOCKER_REGISTRY}bindoffice/bindsql:latest
     restart: on-failure:5
     volumes:
-      - ./binddb/setup_db.sh:/setup_db.sh
+      - ./bindsql/setup_db.sh:/setup_db.sh
     entrypoint: "/bin/bash"
     command: /setup_db.sh
     network_mode: "host"
@@ -21,7 +21,7 @@ services:
       DB_NAME: "${DB_NAME}"
       BINDDB_ADDR: "${BINDDB_ADDR}"
     depends_on:
-     - binddb 
+     - bindsql
 
   bindstore:
     image: ${DOCKER_REGISTRY}bindoffice/bindstore:latest
@@ -94,7 +94,7 @@ services:
     network_mode: "host"
     environment:
       BIND_OFFICE_API_ADDR: "${OFFICE_API_ADDR}"
-      BIND_SQLDB: "postgresql://root@${BINDDB_ADDR}/${DB_NAME}"
+      BIND_SQLDB: "postgresql://root@${BINDSQL_ADDR}/${DB_NAME}"
       BIND_OSS_PUBLIC_ADDR: "${DOMAIN}"
       BIND_OSS_ADDR: "${MINIO_ADDR}"
       BIND_OSS_ACCESS_KEY: "${MINIO_USER}"
@@ -102,8 +102,7 @@ services:
       BIND_OSS_USE_SSL: "${MINIO_USESSL}"
       BIND_OSS_DRIVE_BUCKET_NAME: "${DRIVE_BUCKET}"
     depends_on:
-       - binddb
-       - binddb-init
+       - bindsql
        - bindstore
 
   
@@ -155,7 +154,7 @@ services:
       BIND_MQTT_ADDR: "${MQTT_IP}:${MQTT_PORT}"
       BIND_FROMUSER: ""
       BIND_SEARCH_SERVER: "http://${SEARCH_ADDR}"
-      BIND_SQLDB: "postgresql://root@${BINDDB_ADDR}/${DB_NAME}"
+      BIND_SQLDB: "postgresql://root@${BINDSQL_ADDR}/${DB_NAME}"
       BIND_HTTP_ADDR: "${BINDIP}:40008"
       BIND_ALLOW_ORIGIN: "${ALLOW_ORIGIN}"
       BIND_OSS_PUBLIC_ADDR: "${DOMAIN}"
@@ -185,8 +184,7 @@ services:
       BIND_MCP_SERVER_URL: "http://${MCP_ADDR}"
     depends_on:
       #- db
-       - binddb
-       - binddb-init
+       - bindsql
        - redis
        - bindstore
        - office-api
@@ -241,7 +239,7 @@ services:
       - ./task/logs:/data/www/logs
     network_mode: "host"
     environment:
-      BIND_SQLDB: "postgresql://root@${BINDDB_ADDR}/${DB_NAME}"
+      BIND_SQLDB: "postgresql://root@${BINDSQL_ADDR}/${DB_NAME}"
       BIND_SMTP_ADDRESSES: "${SMTP_ADDR}"
       BIND_SMTP_KEY: "bind-smtp-bucket"
       BIND_LOCAL_SMTP: "${LOCAL_SMTP_DOMAIN}:40025"
@@ -269,8 +267,7 @@ services:
       BIND_MQTT_ADDR: "${MQTT_IP}:${MQTT_PORT}"
       BIND_MQTT_TASK_SECRET: "${TASK_SECRET}"
     depends_on:
-       - binddb
-       - binddb-init
+       - bindsql
        - redis
        - nats
        - bindstore
@@ -301,7 +298,7 @@ services:
       BIND_SMTP_SUBMISSION_TLS_ADDRESSES: "${SMTP_TLS_ADDR}"
       BIND_SMTP_MONITOR_ADDRESSES: ""
       BIND_SMTP_MAILLOG_PATH: "/tmp/maillog.log"
-      BIND_SQLDB: "postgresql://root@${BINDDB_ADDR}/${DB_NAME}"
+      BIND_SQLDB: "postgresql://root@${BINDSQL_ADDR}/${DB_NAME}"
       BIND_NATS_URL: "${NATS_URL}"
       BIND_NATS_CLUSTER_ID: "${NATS_CLUSTER_ID}"
       BIND_NATS_TASK_CLIENT_ID: "bind-service-a"
@@ -342,7 +339,7 @@ services:
       BIND_IMAP_ADDR: "${IMAP_ADDR}"
       BIND_CERT_DIR: "${CERT_DIR}"
       BIND_IMAP_TLS_ADDR: "${IMAP_TLS_ADDR}"
-      BIND_SQLDB: "postgresql://root@${BINDDB_ADDR}/${DB_NAME}"
+      BIND_SQLDB: "postgresql://root@${BINDSQL_ADDR}/${DB_NAME}"
       BIND_SESSION_HEDIS_HOST: "${REDIS_ADDR}"
       BIND_SESSION_HEDIS_PASSWORD: ""
       BIND_SESSION_HEDIS_DB: "1"
@@ -350,8 +347,7 @@ services:
       BIND_SEARCH_SERVER: "http://${SEARCH_ADDR}"
     depends_on:
       - search
-      - binddb
-      - binddb-init
+      - bindsql
 
   bindmcp:
     image: ${DOCKER_REGISTRY}bindoffice/bindmcp:latest
@@ -397,7 +393,7 @@ services:
     restart: always
 
 volumes:
-    binddb:
+    bindsql:
     redis:
     conf:
     nginx:
