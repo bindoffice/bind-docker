@@ -277,7 +277,7 @@ services:
        - bindsearch
        - rspamd
 
-  smtp:
+  bindsmtp:
     image: ${DOCKER_REGISTRY}bindoffice/bindsmtp:latest
     command: ["/data/www/bindsmtp/bindsmtp"]
     restart: always
@@ -329,7 +329,7 @@ services:
       - redis
       - nats
 
-  imap:
+  bindimap:
     image: ${DOCKER_REGISTRY}bindoffice/bindimap:latest
     command: ["/data/www/bindimap/bindimap"]
     restart: always
