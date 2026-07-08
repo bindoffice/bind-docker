@@ -1,8 +1,32 @@
-all:  compose-up
+DEPS_SERVICES = bindsql bindstore nats redis typesense bindmqtt rspamd unbound
+APP_SERVICES = bindoffice bindsearch bindmeet bindinbox bindtask bindsmtp bindimap bindmcp nginx
+WEB_SERVICES = bindinbox
 
-compose-up:
-	docker compose up -d
+all: compose-up
 
+compose-up: deps-up apps-up
+
+deps-up:
+	docker compose up -d $(DEPS_SERVICES)
+	docker compose up --wait bindsql-init
+
+deps-down:
+	docker compose stop $(DEPS_SERVICES)
+
+deps-restart:
+	docker compose restart $(DEPS_SERVICES)
+
+apps-up:
+	docker compose up -d $(APP_SERVICES)
+
+apps-down:
+	docker compose stop $(APP_SERVICES)
+
+apps-restart:
+	docker compose restart $(APP_SERVICES)
+
+web-restart:
+	docker compose restart $(WEB_SERVICES)
 
 orb:
 	docker compose up -d

@@ -8,6 +8,12 @@ services:
     volumes:
      - ./bindsql/data:/bindsql/bindsql-data
     network_mode: "host"
+    healthcheck:
+      test: ["CMD", "/bindsql/bindsql", "sql", "--host", "127.0.0.1:26257", "--insecure", "-e", "SELECT 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
 
   bindsql-init:
     image: ${DOCKER_REGISTRY}bindoffice/bindsql:latest
@@ -21,7 +27,8 @@ services:
       DB_NAME: "${DB_NAME}"
       BINDSQL_ADDR: "${BINDSQL_ADDR}"
     depends_on:
-     - bindsql
+      bindsql:
+        condition: service_healthy
 
   bindstore:
     image: ${DOCKER_REGISTRY}bindoffice/bindstore:latest
@@ -102,9 +109,12 @@ services:
       BIND_OSS_USE_SSL: "${MINIO_USESSL}"
       BIND_OSS_DRIVE_BUCKET_NAME: "${DRIVE_BUCKET}"
     depends_on:
-       - bindsql
-       - bindsql-init
-       - bindstore
+      bindsql:
+        condition: service_healthy
+      bindsql-init:
+        condition: service_completed_successfully
+      bindstore:
+        condition: service_started
 
   
   bindsearch:
@@ -184,15 +194,22 @@ services:
       BIND_NATS_TASK_MAIL_SAVE_SUBJECT: "bind-save"
       BIND_MCP_SERVER_URL: "http://${MCP_ADDR}"
     depends_on:
-      #- db
-       - bindsql
-       - bindsql-init
-       - redis
-       - bindstore
-       - bindoffice
-       - bindsearch
-       - bindmeet
-       - bindmqtt
+      bindsql:
+        condition: service_healthy
+      bindsql-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+      bindstore:
+        condition: service_started
+      bindoffice:
+        condition: service_started
+      bindsearch:
+        condition: service_started
+      bindmeet:
+        condition: service_started
+      bindmqtt:
+        condition: service_started
 
   typesense:
     image: ${DOCKER_REGISTRY}bindoffice/typesense:28.0
@@ -269,13 +286,20 @@ services:
       BIND_MQTT_ADDR: "${MQTT_IP}:${MQTT_PORT}"
       BIND_MQTT_TASK_SECRET: "${TASK_SECRET}"
     depends_on:
-       - bindsql
-       - bindsql-init
-       - redis
-       - nats
-       - bindstore
-       - bindsearch
-       - rspamd
+      bindsql:
+        condition: service_healthy
+      bindsql-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+      nats:
+        condition: service_started
+      bindstore:
+        condition: service_started
+      bindsearch:
+        condition: service_started
+      rspamd:
+        condition: service_started
 
   bindsmtp:
     image: ${DOCKER_REGISTRY}bindoffice/bindsmtp:latest
@@ -325,10 +349,18 @@ services:
       BIND_OSS_DRIVE_BUCKET_NAME: "${DRIVE_BUCKET}"
 
     depends_on:
-      - bindsearch
-      - bindstore
-      - redis
-      - nats
+      bindsql:
+        condition: service_healthy
+      bindsql-init:
+        condition: service_completed_successfully
+      bindsearch:
+        condition: service_started
+      bindstore:
+        condition: service_started
+      redis:
+        condition: service_started
+      nats:
+        condition: service_started
 
   bindimap:
     image: ${DOCKER_REGISTRY}bindoffice/bindimap:latest
@@ -351,9 +383,12 @@ services:
       BIND_SESSION_HEDIS_POOLSIZE: "10"
       BIND_SEARCH_SERVER: "http://${SEARCH_ADDR}"
     depends_on:
-      - bindsearch
-      - bindsql
-      - bindsql-init
+      bindsql:
+        condition: service_healthy
+      bindsql-init:
+        condition: service_completed_successfully
+      bindsearch:
+        condition: service_started
 
   bindmcp:
     image: ${DOCKER_REGISTRY}bindoffice/bindmcp:latest
