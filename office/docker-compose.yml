@@ -400,6 +400,10 @@ services:
     network_mode: "host"
     environment:
       BIND_MCP_ADDR: "${MCP_ADDR}"
+      # Same listen addr as bindinbox; bindmcp turns it into http://… base URL
+      BIND_HTTP_ADDR: "${BINDIP}:40008"
+      # Compat for images that only read BIND_CLI_BASE_URL (pre BIND_HTTP_ADDR support)
+      BIND_CLI_BASE_URL: "http://${BINDIP}:40008"
 
   nginx:   #nginx
 
