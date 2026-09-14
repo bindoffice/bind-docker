@@ -20,8 +20,6 @@ office/nginx/logs/
 office/static/logs/
 office/store/
 office/bindsql/data/*
-office/postgres/data/*
-!office/postgres/data/.gitkeep
 office/bindmeet/certs/
 
 # Office service directories (runtime-generated)
@@ -58,8 +56,6 @@ docs/nginx/certs/
 docs/nginx/logs/
 docs/store/
 docs/bindsql/data/*
-docs/postgres/data/*
-!docs/postgres/data/.gitkeep
 docs/bindmeet/certs/
 
 # Docs service directories (runtime-generated)
@@ -70,3 +66,61 @@ docs/bindoffice/
 docs/bindsearch/
 
 # Service logs (generated at runtime)
+
+# Office (PostgreSQL) runtime data & logs
+office-postgresql/data/
+office-postgresql/logs/
+office-postgresql/config/
+office-postgresql/certs/
+office-postgresql/cert.crt
+office-postgresql/cert.key
+office-postgresql/redis/data/
+office-postgresql/redis/logs/
+office-postgresql/minio/data/
+office-postgresql/nats/data/
+office-postgresql/typesense/data/
+office-postgresql/typesense/logs/
+office-postgresql/nginx/certs/
+office-postgresql/nginx/logs/
+office-postgresql/static/logs/
+office-postgresql/store/
+office-postgresql/postgres/data/*
+!office-postgresql/postgres/data/.gitkeep
+office-postgresql/bindmeet/certs/
+
+# Office (PostgreSQL) service directories (runtime-generated)
+office-postgresql/bindimap/
+office-postgresql/bindinbox/
+office-postgresql/bindmcp/
+office-postgresql/bindmqtt/
+office-postgresql/bindoffice/
+office-postgresql/bindsearch/
+office-postgresql/bindsmtp/
+office-postgresql/bindtask/
+office-postgresql/filter/
+office-postgresql/imap/
+office-postgresql/livekit/
+office-postgresql/rspamd/
+office-postgresql/smtp/
+office-postgresql/web/
+
+# Docs (PostgreSQL) runtime data & logs
+docs-postgresql/logs/
+docs-postgresql/redis/data/
+docs-postgresql/redis/logs/
+docs-postgresql/nats/data/
+docs-postgresql/typesense/data/
+docs-postgresql/typesense/logs/
+docs-postgresql/nginx/certs/
+docs-postgresql/nginx/logs/
+docs-postgresql/store/
+docs-postgresql/postgres/data/*
+!docs-postgresql/postgres/data/.gitkeep
+docs-postgresql/bindmeet/certs/
+
+# Docs (PostgreSQL) service directories (runtime-generated)
+docs-postgresql/bindinbox/
+docs-postgresql/bindmcp/
+docs-postgresql/bindmqtt/
+docs-postgresql/bindoffice/
+docs-postgresql/bindsearch/

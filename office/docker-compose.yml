@@ -33,7 +33,6 @@ services:
   bindstore:
     image: ${DOCKER_REGISTRY}bindoffice/bindstore:latest
     restart: always
-    container_name: bindstore
     command: /data/www/bindstore/bindstore server /data/www/store --address ${MINIO_ADDR}
     network_mode: "host"
     environment:
@@ -50,7 +49,6 @@ services:
 
   nats:
     image: ${DOCKER_REGISTRY}bindoffice/nats:2.9.25
-    container_name: bind_nats
     restart: always
     command: -c /etc/nats/nats.conf
     volumes:
@@ -61,7 +59,6 @@ services:
   redis:
     image: ${DOCKER_REGISTRY}bindoffice/redis:6.0
     restart: always
-    container_name: bind_redis
     volumes:
       - ./redis/data:/data/redis
       - ./redis/logs/:/data/logs/
@@ -92,7 +89,6 @@ services:
 
   bindoffice:
     image: ${DOCKER_REGISTRY}bindoffice/bindoffice:latest
-    container_name: bindoffice       #容器的名称
     command: ["/data/www/bindoffice/bindoffice"]
     restart: always
     tty: true
@@ -119,7 +115,6 @@ services:
   
   bindsearch:
     image: ${DOCKER_REGISTRY}bindoffice/bindsearch:latest
-    container_name: bindsearch       #容器的名称
     command: ["/data/www/bindsearch/bindsearch"]
     restart: always
     tty: true
@@ -137,7 +132,6 @@ services:
   bindinbox:
     image: ${DOCKER_REGISTRY}bindoffice/bindinbox:latest
     command: ["/data/www/bindinbox/bindinbox"]
-    container_name: inboxserver
     restart: always
     tty: true
     volumes:
@@ -213,7 +207,6 @@ services:
 
   typesense:
     image: ${DOCKER_REGISTRY}bindoffice/typesense:28.0
-    container_name: typesense
     command: --data-dir /data --api-key=${TYPESENSE_KEY} --api-address=${TYPESENSE_ADDR} --api-port=${TYPESENSE_PORT}
     restart: on-failure
     tty: true
@@ -228,7 +221,6 @@ services:
 
   bindmqtt:
     image: ${DOCKER_REGISTRY}bindoffice/bindmqtt:latest
-    container_name: bindmqtt
     command: ["/data/www/bindmqtt/bindmqtt"]
     restart: always
     tty: true
@@ -248,7 +240,6 @@ services:
 
   bindtask:
     image: ${DOCKER_REGISTRY}bindoffice/bindtask:latest
-    container_name: bindtask
     command: ["/data/www/bindtask/bindtask"]
     restart: always
     tty: true
@@ -303,7 +294,6 @@ services:
 
   bindsmtp:
     image: ${DOCKER_REGISTRY}bindoffice/bindsmtp:latest
-    container_name: bindsmtp
     command: ["/data/www/bindsmtp/bindsmtp"]
     restart: always
     tty: true
@@ -364,7 +354,6 @@ services:
 
   bindimap:
     image: ${DOCKER_REGISTRY}bindoffice/bindimap:latest
-    container_name: bindimap
     command: ["/data/www/bindimap/bindimap"]
     restart: always
     tty: true
@@ -408,7 +397,6 @@ services:
   nginx:   #nginx
 
     image: ${DOCKER_REGISTRY}bindoffice/nginx:1.31.0  #nginx镜像，如果镜像容器没有会去自动拉取
-    container_name: bind_nginx       #容器的名称
     restart: always             #跟随docker的启动而启动
     volumes:                    #挂载卷命令
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
@@ -421,7 +409,6 @@ services:
 
   rspamd:
     image: ${DOCKER_REGISTRY}bindoffice/rspamd:latest  #nginx镜像，如果镜像容器没有会去自动拉取
-    container_name: bind_rspamd       #容器的名称
     restart: always             #跟随docker的启动而启动
     volumes:                    #挂载卷命令
       - ./config:/etc/rspamd/local.d
@@ -434,7 +421,6 @@ services:
 
   unbound:
     image: ${DOCKER_REGISTRY}bindoffice/unbound:latest
-    container_name: rspamd-unbound
     restart: always
 
 volumes:

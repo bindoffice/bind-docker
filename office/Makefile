@@ -1,24 +1,10 @@
 DEPS_SERVICES = bindsql bindstore nats redis typesense bindmqtt rspamd unbound
 APP_SERVICES = bindoffice bindsearch bindmeet bindinbox bindtask bindsmtp bindimap bindmcp nginx
 WEB_SERVICES = bindinbox
-POSTGRES_COMPOSE = docker-compose.postgres.yml
-POSTGRES_DEPS_SERVICES = postgres bindstore nats redis typesense bindmqtt rspamd unbound
 
 all: compose-up
 
 compose-up: deps-up apps-up
-
-compose-up-postgres: deps-up-postgres apps-up-postgres
-
-deps-up-postgres:
-	docker compose -f $(POSTGRES_COMPOSE) up -d $(POSTGRES_DEPS_SERVICES)
-	docker compose -f $(POSTGRES_COMPOSE) up --wait postgres-init
-
-apps-up-postgres:
-	docker compose -f $(POSTGRES_COMPOSE) up -d $(APP_SERVICES)
-
-down-postgres:
-	docker compose -f $(POSTGRES_COMPOSE) down
 
 deps-up:
 	docker compose up -d $(DEPS_SERVICES)
