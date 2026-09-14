@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 
 set -a; # 将所有变量自动导出
-source ./.env ;
+. ./.env ;
 set +a;
 
-List=(bind-meetserver bind-static)
+List="bind-meetserver bind-static"
 
-for name in ${List[@]};
+for name in $List;
 do
     echo $name;
     REF="$DOCKER_REGISTRY"bindoffice/"$name"
