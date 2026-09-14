@@ -8,7 +8,6 @@ compose-up: deps-up apps-up
 
 deps-up:
 	docker compose up -d $(DEPS_SERVICES)
-	docker compose up --wait postgres-init
 
 deps-down:
 	docker compose stop $(DEPS_SERVICES)
