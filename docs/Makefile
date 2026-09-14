@@ -1,8 +1,8 @@
-DEPS_SERVICES = bindsql bindstore nats redis typesense bindmqtt rspamd unbound
-APP_SERVICES = bindoffice bindsearch bindmeet bindinbox bindtask bindsmtp bindimap bindmcp nginx
+DEPS_SERVICES = bindsql bindstore nats redis typesense bindmqtt
+APP_SERVICES = bindoffice bindsearch bindmeet bindinbox bindmcp nginx
 WEB_SERVICES = bindinbox
 POSTGRES_COMPOSE = docker-compose.postgres.yml
-POSTGRES_DEPS_SERVICES = postgres bindstore nats redis typesense bindmqtt rspamd unbound
+POSTGRES_DEPS_SERVICES = postgres bindstore nats redis typesense bindmqtt
 
 all: compose-up
 
@@ -49,7 +49,7 @@ cert:generate copy
 
 
 renew:
-	sh bin/cert-renew.sh && \cp -f inbox/certs/cert.key nginx/certs/cert.key && \cp -f inbox/certs/cert.crt nginx/certs/cert.crt && \cp -f inbox/certs/cert.key smtp/certs/cert.key && \cp -f inbox/certs/cert.crt smtp/certs/cert.crt
+	sh bin/cert-renew.sh && \cp -f bindinbox/certs/cert.key nginx/certs/cert.key && \cp -f bindinbox/certs/cert.crt nginx/certs/cert.crt
 
 
 openssl:
@@ -59,8 +59,7 @@ generate:
 	sh bin/cert.sh
 
 copy:
-	 \cp -f inbox/certs/cert.key nginx/certs/cert.key && \cp -f inbox/certs/cert.crt nginx/certs/cert.crt
-	 \cp -f inbox/certs/cert.key smtp/certs/cert.key && \cp -f inbox/certs/cert.crt smtp/certs/cert.crt
+	 \cp -f bindinbox/certs/cert.key nginx/certs/cert.key && \cp -f bindinbox/certs/cert.crt nginx/certs/cert.crt
 
 stop: #docker stop `docker ps -aq`
 	docker compose down

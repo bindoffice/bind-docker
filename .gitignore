@@ -2,27 +2,71 @@
 .env
 .DS_Store
 
-# Office runtime data
-office/redis/data/
-office/minio/data/
-office/crdb/data/
-office/typesense/data/
-office/nats/data/
+# Office runtime data & logs
 office/data/
 office/logs/
 office/config/
+office/certs/
+office/cert.crt
+office/cert.key
+office/redis/data/
+office/redis/logs/
+office/minio/data/
+office/nats/data/
+office/typesense/data/
+office/typesense/logs/
+office/nginx/certs/
+office/nginx/logs/
+office/static/logs/
+office/store/
+office/bindsql/data/*
+office/postgres/data/*
+!office/postgres/data/.gitkeep
+office/bindmeet/certs/
+
+# Office service directories (runtime-generated)
+office/bindimap/
+office/bindinbox/
+office/bindmcp/
+office/bindmqtt/
+office/bindoffice/
+office/bindsearch/
+office/bindsmtp/
+office/bindtask/
+office/filter/
+office/imap/
+office/livekit/
+office/rspamd/
+office/smtp/
+office/web/
 
 # Meet runtime data
 meet/redis/data/
-
-# Generated certificates
-office/inbox/certs/cert.crt
-office/inbox/certs/cert.key
-office/nginx/certs/
-office/smtp/certs/
-office/meetserver/certs/
-meet/meetserver/certs/
+meet/redis/logs/
+meet/nginx/logs/
+meet/bindmeet/certs/
 meet/nginx/certs/
-office/bindsql/data/*
+
+# Docs runtime data & logs
+docs/logs/
+docs/redis/data/
+docs/redis/logs/
+docs/nats/data/
+docs/typesense/data/
+docs/typesense/logs/
+docs/nginx/certs/
+docs/nginx/logs/
+docs/store/
+docs/bindsql/data/*
+docs/postgres/data/*
+!docs/postgres/data/.gitkeep
+docs/bindmeet/certs/
+
+# Docs service directories (runtime-generated)
+docs/bindinbox/
+docs/bindmcp/
+docs/bindmqtt/
+docs/bindoffice/
+docs/bindsearch/
 
 # Service logs (generated at runtime)
