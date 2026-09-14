@@ -1,13 +1,13 @@
-#!/bin/bash
+#!/bin/sh
 
 set -a; # 将所有变量自动导出
-source ./.env ;
+. ./.env ;
 set +a;
 
 
-List=(bindinbox bindsearch bindmeet bindoffice bindmqtt bindmcp bindsql bindstore)
+List="bindinbox bindsearch bindmeet bindoffice bindmqtt bindmcp bindsql bindstore"
 
-for name in ${List[@]};
+for name in $List;
 do
     echo $name;
     REF="$DOCKER_REGISTRY"bindoffice/"$name"

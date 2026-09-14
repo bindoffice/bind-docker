@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ ! -f ./.env ]; then
 	echo ".env not found. Run 'cp env.example .env' and edit it first." >&2
@@ -6,14 +6,14 @@ if [ ! -f ./.env ]; then
 fi
 
 set -a # 将所有变量自动导出
-source ./.env
+. ./.env
 set +a
 
 CERT_DIR="nginx/certs"
 CRT="$CERT_DIR/cert.crt"
 KEY="$CERT_DIR/cert.key"
 
-if [[ -f "$CRT" && -f "$KEY" ]]; then
+if [ -f "$CRT" ] && [ -f "$KEY" ]; then
 	echo "Certificates already exist at $CRT and $KEY; skipping generation."
 	exit 0
 fi

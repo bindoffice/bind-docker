@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 set -a # 将所有变量自动导出
-source ./.env
+. ./.env
 set +a
 
 docker pull "$DOCKER_REGISTRY"bindoffice/bindinbox:latest
