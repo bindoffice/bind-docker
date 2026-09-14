@@ -142,9 +142,9 @@ services:
     volumes:
       - ./bindinbox/logs:/data/www/logs
       - ./bindinbox/certs:/tmp/bind_certs
-      #- /etc/ssl/certs/ca-bundle.crt:/etc/ssl/certs/ca-bundle.crt":
-      #- /etc/ssl/certs/ca-bundle.trust.crt:/etc/ssl/certs/ca-bundle.trust.crt
+      # CA bundle: the repo file mounted at both the Debian and RHEL trust-store paths
       - ./1:/etc/ssl/certs/ca-bundle.crt
+      - ./1:/etc/ssl/certs/ca-certificates.crt
       - ./2:/etc/ssl/certs/ca-bundle.trust.crt
     network_mode: "host"
     environment:
