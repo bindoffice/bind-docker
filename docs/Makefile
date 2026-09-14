@@ -16,7 +16,7 @@ deps-down:
 deps-restart:
 	docker compose restart $(DEPS_SERVICES)
 
-apps-up:
+apps-up: openssl
 	docker compose up -d $(APP_SERVICES)
 
 apps-down:
@@ -28,7 +28,7 @@ apps-restart:
 web-restart:
 	docker compose restart $(WEB_SERVICES)
 
-orb:
+orb: openssl
 	docker compose up -d
 
 cert:generate copy

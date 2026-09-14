@@ -16,7 +16,7 @@ deps-down:
 deps-restart:
 	docker compose restart $(DEPS_SERVICES)
 
-apps-up:
+apps-up: openssl
 	docker compose up -d $(APP_SERVICES)
 
 apps-down:
@@ -28,14 +28,14 @@ apps-restart:
 web-restart:
 	docker compose restart $(WEB_SERVICES)
 
-orb:
+orb: openssl
 	docker compose up -d
 
 cert:generate copy
 
 
 renew:
-	sh bin/cert-renew.sh && \cp -f inbox/certs/cert.key nginx/certs/cert.key && \cp -f inbox/certs/cert.crt nginx/certs/cert.crt && \cp -f inbox/certs/cert.key smtp/certs/cert.key && \cp -f inbox/certs/cert.crt smtp/certs/cert.crt
+	sh bin/cert-renew.sh && \cp -f bindinbox/certs/cert.key nginx/certs/cert.key && \cp -f bindinbox/certs/cert.crt nginx/certs/cert.crt && \cp -f bindinbox/certs/cert.key smtp/certs/cert.key && \cp -f bindinbox/certs/cert.crt smtp/certs/cert.crt
 
 
 openssl:
@@ -45,8 +45,8 @@ generate:
 	sh bin/cert.sh
 
 copy:
-	 \cp -f inbox/certs/cert.key nginx/certs/cert.key && \cp -f inbox/certs/cert.crt nginx/certs/cert.crt
-	 \cp -f inbox/certs/cert.key smtp/certs/cert.key && \cp -f inbox/certs/cert.crt smtp/certs/cert.crt
+	 \cp -f bindinbox/certs/cert.key nginx/certs/cert.key && \cp -f bindinbox/certs/cert.crt nginx/certs/cert.crt
+	 \cp -f bindinbox/certs/cert.key smtp/certs/cert.key && \cp -f bindinbox/certs/cert.crt smtp/certs/cert.crt
 
 stop: #docker stop `docker ps -aq`
 	docker compose down
