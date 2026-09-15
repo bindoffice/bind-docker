@@ -8,6 +8,15 @@ orb: openssl
 
 cert:generate copy
 
+renew:
+	sh bin/cert-renew.sh
+
+cron:
+	sh bin/cert-cron.sh install
+
+uncron:
+	sh bin/cert-cron.sh remove
+
 openssl:
 	sh bin/openssl.sh
 
@@ -15,7 +24,7 @@ generate:
 	sh bin/cert.sh
 
 copy:
-	 \cp -f bindmeet/certs/cert.key nginx/certs/cert.key && \cp -f bindmeet/certs/cert.crt nginx/certs/cert.crt
+	sh bin/cert-distribute.sh
 
 stop:
 	#docker stop `docker ps -aq`

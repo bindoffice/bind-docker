@@ -18,6 +18,10 @@ This is the PostgreSQL variant of `office/`: PostgreSQL replaces bindsql (Cockro
 
 打开首页 [http://127.0.0.1:40008](http://127.0.0.1:40008)
 
+## 证书自动续期 Certificate auto-renewal
+
+与 `office/` 相同：`make cron` 安装 crontab（默认每天执行一次 `make renew`），`make uncron` 卸载，`sh bin/cert-cron.sh show` 查看。`make renew` 是幂等的，仅在证书剩余时间少于 `CERT_RENEW_DAYS`（默认 30 天）时才真正续期并 reload nginx。详见仓库根目录 [../README.md](../README.md)。
+
 ## 共享配置需两处同步 Shared config must be kept in sync
 
 本目录由 `office/` 复制而来。除数据库相关部分外，两者**共享同一套配置**，在仓库中保存为两份副本：

@@ -34,7 +34,13 @@ cert:generate copy
 
 
 renew:
-	sh bin/cert-renew.sh && \cp -f bindinbox/certs/cert.key nginx/certs/cert.key && \cp -f bindinbox/certs/cert.crt nginx/certs/cert.crt
+	sh bin/cert-renew.sh
+
+cron:
+	sh bin/cert-cron.sh install
+
+uncron:
+	sh bin/cert-cron.sh remove
 
 
 openssl:
@@ -44,7 +50,7 @@ generate:
 	sh bin/cert.sh
 
 copy:
-	 \cp -f bindinbox/certs/cert.key nginx/certs/cert.key && \cp -f bindinbox/certs/cert.crt nginx/certs/cert.crt
+	sh bin/cert-distribute.sh
 
 stop: #docker stop `docker ps -aq`
 	docker compose down

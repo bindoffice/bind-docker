@@ -21,6 +21,9 @@
 
 - 本地开发：运行 `make openssl` 生成自签名证书到 `nginx/certs/`
 - 生产环境：配置好域名解析后运行 `make cert`，通过 ACME 申请正式证书
+- 自动续期：`make cron` 安装 crontab（默认每天 03:00 执行 `make renew`），`make uncron` 卸载，`sh bin/cert-cron.sh show` 查看
+
+ACME 证书有效期 3 个月。`make renew` 是幂等的：仅当 nginx 当前证书剩余时间少于 `CERT_RENEW_DAYS`（默认 30 天）时才真正续期，然后 reload nginx。可选变量 `CERT_RENEW_DAYS`、`CERT_CRON_SCHEDULE` 见 `env.example`，日志在 `logs/cert-renew.log`（需该用户能免 sudo 使用 Docker）。
 
 # LDAP 认证
 

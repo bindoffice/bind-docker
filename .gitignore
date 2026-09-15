@@ -42,6 +42,7 @@ office/web/
 meet/redis/data/
 meet/redis/logs/
 meet/nginx/logs/
+meet/logs/
 meet/bindmeet/certs/
 meet/nginx/certs/
 

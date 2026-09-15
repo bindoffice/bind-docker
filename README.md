@@ -84,6 +84,29 @@ zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentatio
 
 打开首页 [http://127.0.0.1:8888](http://127.0.0.1:8888)
 
+# 证书自动续期 Certificate auto-renewal
+
+`make cert` 通过 ACME（Let's Encrypt 等）申请正式证书，有效期只有 3 个月，手动 `make renew` 很容易忘记。装一条 crontab 即可自动续期：
+
+```
+  make cron      # 安装定时续期任务（可重复执行，会替换旧任务）
+  make uncron    # 卸载
+  sh bin/cert-cron.sh show   # 查看已安装的任务
+```
+
+定时任务实际执行的是 `make renew`，它是**幂等**的：脚本先用 `openssl x509 -checkend` 检查 nginx 正在使用的证书，剩余有效期大于 `CERT_RENEW_DAYS`（默认 30 天）时直接跳过，所以每天跑也不会触发 Let's Encrypt 的重复证书频率限制（同一组域名每周 5 张）。
+
+只有临近过期时才会：调用 ACME 续期接口 → 把新证书分发到 `nginx/certs`、`smtp/certs`、`imap/certs` → reload nginx、重启 `bindsmtp`/`bindimap`（需要立即生效的邮件服务）。日志追加写入 `<部署目录>/logs/cert-renew.log`。
+
+| 变量 | 默认值 | 说明 |
+| --- | --- | --- |
+| `CERT_RENEW_DAYS` | `30` | 剩余天数少于该值时续期 |
+| `CERT_CRON_SCHEDULE` | `0 3 * * *` | `make cron` 写入 crontab 的计划 |
+
+两个变量写在 `.env` 里（见 `env.example`）。crontab 归属执行 `make cron` 的用户，该用户必须能免 sudo 使用 Docker（在 `docker` 组内，或直接用 root 执行 `make cron`）。
+
+不想用 crontab 的话，也可以用 systemd timer 或其他调度器定时执行 `cd <部署目录> && make renew`。需要强制续期（忽略剩余天数）时：`CERT_FORCE_RENEW=1 sh bin/cert-renew.sh`。
+
 # 目录结构 Layout
 
 每套服务放在独立目录，互不影响：
