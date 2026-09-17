@@ -27,6 +27,10 @@ zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentatio
 
 # 使用 Usage
 
+数据库统一使用 PostgreSQL：`postgres` + `postgres-init` 服务，连接串由 `POSTGRES_*` 变量拼装。
+
+PostgreSQL is the only supported database: the `postgres` + `postgres-init` services, with the connection string built from the `POSTGRES_*` variables.
+
 ## Office 办公套件
 
 ```
@@ -48,12 +52,12 @@ zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentatio
 
 打开首页 [http://127.0.0.1:40008](http://127.0.0.1:40008)
 
-### Office（PostgreSQL 版）
+详见 [office/README.md](office/README.md) / See [office/README.md](office/README.md).
 
-数据库用 PostgreSQL 替代 bindsql（CockroachDB），配置在 `office-postgresql/`，用法相同：
+## Docs 文档（精简部署）
 
 ```
-  cd bind-docker/office-postgresql
+  cd bind-docker/docs
 
   cp env.example .env
 
@@ -65,6 +69,8 @@ zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentatio
 ```
 
 打开首页 [http://127.0.0.1:40008](http://127.0.0.1:40008)
+
+详见 [docs/README.md](docs/README.md) / See [docs/README.md](docs/README.md).
 
 ## Meet 视频会议（独立部署）
 
@@ -113,22 +119,26 @@ zh-hans: [视频会议文档中文版](https://bindoffice.github.io/documentatio
 
 | 目录 | 数据库 | 说明 |
 | --- | --- | --- |
-| `office/` | bindsql（CockroachDB） | 办公套件 |
-| `office-postgresql/` | PostgreSQL | 办公套件，数据库换成 PostgreSQL |
-| `docs/` | bindsql（CockroachDB） | 文档（精简部署） |
-| `docs-postgresql/` | PostgreSQL | 文档，数据库换成 PostgreSQL |
+| `office/` | PostgreSQL | 办公套件 |
+| `docs/` | PostgreSQL | 文档（精简部署） |
 | `meet/` | — | 视频会议（独立部署） |
 
-PostgreSQL 版本使用 `postgres` + `postgres-init` 服务（`POSTGRES_*` 变量），bindsql 版本使用 `bindsql` + `bindsql-init`（`BINDSQL_ADDR`）。四个目录的 compose 不再共享 `container_name`，容器名按目录名自动生成，因此可以在目录之间安全切换部署。
+容器名按目录名自动生成（compose 不再共享 `container_name`），因此 `office/`、`docs/`、`meet/` 可以在同一台机器上并存。
 
-# 共享配置需两处同步 Shared config must be kept in sync
+`postgres` 和 `redis` **不用 host 网络**：host 模式下 `ports` 会被忽略、端口无法暴露给宿主机，因此它们把 `POSTGRES_ADDR` / `REDIS_ADDR` 同时当作发布地址，默认分别是 `127.0.0.1:5432`、`127.0.0.1:6379`（仅宿主机本机可访问），设成 `0.0.0.0:...` 可对局域网开放（redis 无密码，不建议）。
 
-`office-postgresql/` 由 `office/` 复制而来，`docs-postgresql/` 由 `docs/` 复制而来。除数据库相关部分外，两者**共享同一套配置**，在仓库中保存为两份副本：
+`postgres` and `redis` are **not** on host networking: `ports` is ignored in host mode, so those ports would never reach the host. They therefore use `POSTGRES_ADDR` / `REDIS_ADDR` as the published address too — `127.0.0.1:5432` and `127.0.0.1:6379` (host loopback only) by default, or `0.0.0.0:...` to expose them on the LAN (not recommended for the passwordless redis).
 
-- `bin/`（证书、更新、镜像同步等脚本）
-- `nginx/conf/`、`nginx/conf.d/`
-- `redis/redis.conf`、`nats/nats.conf`
-- `bindmeet/config.yaml`
-- `1`、`2`（CA 证书包）
+# 共享配置需多处同步 Shared config must be kept in sync
 
-修改以上任一文件时，请**同时更新对应的两个目录**（`office/` ⇄ `office-postgresql/`，`docs/` ⇄ `docs-postgresql/`），否则会造成配置漂移。
+`office/`、`docs/`、`meet/` 是三个独立部署，但以下文件在仓库中保存为多份副本，内容应当保持一致：
+
+- 证书脚本 `bin/cert-cron.sh`、`bin/cert-distribute.sh`、`bin/cert-renew.sh`、`bin/cert.sh`、`bin/openssl.sh`（`office/`、`docs/`、`meet/` 三处）
+- `redis/redis.conf`（`office/`、`docs/`、`meet/` 三处）
+- `nats/nats.conf`（`office/`、`docs/`）
+- `bindmeet/config.yaml`（`office/`、`docs/`）
+- `1`、`2`（CA 证书包，`office/`、`docs/`、`meet/` 三处）
+
+`nginx/` 配置以及 `bin/remove.sh`、`bin/update.sh` 依赖各部署实际运行的服务，`docs/` 作为精简部署与 `office/` 不同，属正常差异。
+
+修改以上任一文件时，请**同时更新对应的多个目录**，否则会造成配置漂移。

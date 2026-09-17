@@ -13,5 +13,5 @@ docker pull "$DOCKER_REGISTRY"bindoffice/bindtask:latest
 docker pull "$DOCKER_REGISTRY"bindoffice/bindsearch:latest
 docker pull "$DOCKER_REGISTRY"bindoffice/bindmqtt:latest
 docker pull "$DOCKER_REGISTRY"bindoffice/bindmcp:latest
-docker pull "$DOCKER_REGISTRY"bindoffice/bindsql:latest
+docker pull "${POSTGRES_IMAGE:-postgres:16}"
 docker pull "$DOCKER_REGISTRY"bindoffice/bindstore:latest

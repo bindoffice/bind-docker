@@ -1,4 +1,4 @@
-DEPS_SERVICES = bindsql bindstore nats redis typesense bindmqtt rspamd unbound
+DEPS_SERVICES = postgres bindstore nats redis typesense bindmqtt rspamd unbound
 APP_SERVICES = bindoffice bindsearch bindmeet bindinbox bindtask bindsmtp bindimap bindmcp nginx
 WEB_SERVICES = bindinbox
 
