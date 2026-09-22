@@ -3,6 +3,7 @@ services:
     image: "${POSTGRES_IMAGE:-postgres:16}"
     restart: always
     environment:
+      POSTGRES_ADDR: "${POSTGRES_ADDR:-127.0.0.1:5432}"
       POSTGRES_USER: "${POSTGRES_USER:-postgres}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-changepassword}"
       POSTGRES_DB: "${DB_NAME}"
@@ -66,6 +67,7 @@ services:
     volumes:
       - ./nats/nats.conf:/etc/nats/nats.conf
       - ./nats/data:/data
+    # host 网络：nats.conf 已绑 127.0.0.1（客户端 42422 / cluster 6221），不对公网监听
     network_mode: "host"
 
   redis:

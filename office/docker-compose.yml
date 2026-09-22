@@ -5,6 +5,7 @@ services:
     image: "${POSTGRES_IMAGE:-postgres:16}"
     restart: always
     environment:
+      POSTGRES_ADDR: "${POSTGRES_ADDR:-127.0.0.1:5432}"
       POSTGRES_USER: "${POSTGRES_USER:-postgres}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-changepassword}"
       POSTGRES_DB: "${DB_NAME}"
@@ -68,6 +69,7 @@ services:
     volumes:
       - ./nats/nats.conf:/etc/nats/nats.conf
       - ./nats/data:/data
+    # host 网络：nats.conf 已绑 127.0.0.1（客户端 42422 / cluster 6221），不对公网监听
     network_mode: "host"
 
   redis:
@@ -438,6 +440,8 @@ services:
     restart: always             #跟随docker的启动而启动
     volumes:                    #挂载卷命令
       - ./config:/etc/rspamd/local.d
+      # override.d 覆盖镜像默认 *:11332/11333/11334，仅绑 127.0.0.1（host 网络下等于不对公网开放）
+      - ./rspamd-conf/override.d:/etc/rspamd/override.d
       - ./data:/var/lib/rspamd
       - ./logs:/var/log/rspamd
     depends_on:
@@ -445,6 +449,7 @@ services:
       - unbound
     network_mode: "host"
 
+  # bridge、不发布端口：DNS 只在容器网内；不对宿主机/公网暴露 53
   unbound:
     image: ${DOCKER_REGISTRY}bindoffice/unbound:latest
     restart: always
