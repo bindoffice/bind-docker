@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postgres:
-    image: "${POSTGRES_IMAGE:-postgres:16}"
+    image: "${DOCKER_REGISTRY}bindoffice/postgres:16"
     restart: always
     environment:
       POSTGRES_ADDR: "${POSTGRES_ADDR:-127.0.0.1:5432}"
@@ -28,7 +28,7 @@ services:
       start_period: 10s
 
   postgres-init:
-    image: "${POSTGRES_IMAGE:-postgres:16}"
+    image: "${DOCKER_REGISTRY}bindoffice/postgres:16"
     restart: on-failure:5
     volumes:
       - ./postgres/setup_db.sh:/setup_db.sh
@@ -453,19 +453,3 @@ services:
   unbound:
     image: ${DOCKER_REGISTRY}bindoffice/unbound:latest
     restart: always
-
-volumes:
-    postgres:
-    redis:
-    conf:
-    nginx:
-    bindstore:
-    bindoffice:
-    bindmeet:
-    bindsmtp:
-    bindimap:
-    bindmcp:
-    bindmqtt:
-    bindtask:
-    bindsearch:
-    typesense:
