@@ -7,7 +7,7 @@ services:
     container_name: meet_redis
     volumes:
       - ./redis/data:/data/redis
-      - ./redis/logs/redis.log:/data/logs/redis.log
+      - ./redis/logs/:/data/logs/
       - ./redis/redis.conf:/etc/redis/redis.conf
     command:
       redis-server /etc/redis/redis.conf
@@ -57,8 +57,3 @@ services:
       - redis
       - bindmeet
     network_mode: "host"
-
-volumes:
-    redis:
-    bindmeet:
-    nginx:
